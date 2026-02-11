@@ -17,7 +17,7 @@ An intelligent career guidance application powered by Google Gemini AI, LangChai
 - Top hiring companies and industry sectors
 - Major hiring cities (Bangalore, Mumbai, Delhi, Hyderabad, Pune, etc.)
 - In-demand skills and remote work availability
-- Web-powered live data search
+- Web-powered live data search using LangChain Agents
 
 ### 🎓 College & University Recommendations
 - Personalized recommendations for Indian colleges and universities
@@ -29,68 +29,35 @@ An intelligent career guidance application powered by Google Gemini AI, LangChai
 
 ### 📝 Resume Coach & Feedback
 - AI-powered resume analysis and scoring
+- Supports **File Upload** (PDF, DOCX, TXT) and **Text Paste**
 - ATS (Applicant Tracking System) optimization tips
 - Section-by-section detailed feedback
 - Content, format, and structure analysis
 - Before/After improvement examples
-- Industry-specific tips for Indian job market
-- Support for multiple file formats (PDF, DOCX, TXT)
+- Industry-specific tips for the Indian job market
 
 ### 💬 Interactive AI Career Assistant
-- Context-aware conversational AI
+- Context-aware conversational AI powered by LangChain Agents
 - Ask questions about careers, skills, colleges, and job market
 - Personalized guidance and recommendations
 - Access to live web data for current information
 
-## 🏢 Career Categories Covered
+## 📂 Project Structure
 
-### 💻 Technology
-- AI & Machine Learning Engineer
-- Data Scientist
-- Cybersecurity Analyst
-- Cloud Solutions Architect
-- Full Stack Developer
-- DevOps Engineer
-- Blockchain Developer
-- Mobile App Developer
-- Data Engineer
-- Software Quality Assurance Engineer
+The project follows a modular structure for better maintainability:
 
-### 🩺 Healthcare
-- Medical Data Analyst
-- Telehealth Specialist
-- Biomedical Engineer
-- Clinical Research Associate
-- Healthcare Administrator
-- Public Health Specialist
-- Medical Laboratory Technologist
-- Physiotherapist
-- Pharmacy Manager
-- Healthcare IT Consultant
-
-### 💼 Business
-- Business Analyst
-- Digital Marketing Strategist
-- Financial Data Analyst
-- Product Manager
-- HR Analytics Specialist
-- Management Consultant
-- Supply Chain Analyst
-- Investment Banker
-- Brand Manager
-- Operations Manager
-
-### 🎥 Content Creation
-- Video Content Strategist
-- Social Media Manager
-- Copywriter / Content Writer
-- Graphic Designer
-- SEO Specialist
-- Podcast Producer
-- UX/UI Designer
-- Video Editor
-- Influencer Marketing Manager
-- Content Marketing Strategist
+```text
+ai-career-guide/
+├── app.py              # Main Streamlit application entry point
+├── requirements.txt    # Project dependencies
+├── .env                # Environment variables (API keys)
+└── src/                # Source code
+    ├── components/     # UI components (Chat interface, etc.)
+    ├── services/       # Core business logic (AI services, Agent creation)
+    ├── data/           # Static data and constants (Career categories)
+    ├── utils/          # Utility functions (Text processing)
+    └── config.py       # Configuration and API key management
+```
 
 ## 🚀 Getting Started
 
@@ -156,46 +123,14 @@ streamlit run app.py
 
 The application will open in your default web browser at `http://localhost:8501`
 
-## 📖 Usage Guide
-
-1. **Configure API Keys**: Enter your Google Gemini and SerpAPI keys in the sidebar (or set them in the `.env` file)
-
-2. **Select Career Interest**: Choose a career category and specific role from the dropdown menus
-
-3. **Explore Features Using Tabs**:
-   - **🧭 Career Insights**: Generate comprehensive career analysis and learning roadmap
-   - **📊 Market Analysis**: Fetch live job market data and trends
-   - **🎓 College Advisor**: Get personalized college and university recommendations
-   - **📝 Resume Coach**: Upload or paste your resume for AI-powered feedback
-
-4. **Use the Chat Assistant**: Ask any career-related questions in the chat interface at the bottom
-
-5. **Clear Session**: Use the "Clear Session" button in the sidebar to reset all cached data
-
 ## 🛠️ Technology Stack
 
 - **Frontend/UI**: [Streamlit](https://streamlit.io/) - Interactive web application framework
-- **AI Model**: [Google Gemini](https://deepmind.google/technologies/gemini/) (gemini-2.5-flash) - Advanced language model
-- **AI Framework**: [LangChain](https://www.langchain.com/) - AI application development framework
+- **AI Model**: [Google Gemini](https://deepmind.google/technologies/gemini/) (gemini-2.0-flash) - Advanced language model
+- **AI Framework**: [LangChain](https://www.langchain.com/) - AI application development framework (using Agents for search)
 - **Web Search**: [SerpAPI](https://serpapi.com/) - Real-time web search API
 - **Environment Management**: [python-dotenv](https://pypi.org/project/python-dotenv/) - Environment variable management
-- **Document Processing**: PyPDF2 (optional), python-docx (optional) - Resume file parsing
-
-## 📦 Dependencies
-
-Core dependencies (see [requirements.txt](requirements.txt) for complete list):
-- streamlit >= 1.35.0
-- langchain >= 0.2.0, < 0.3.0
-- langchain-google-genai >= 1.0.0, < 2.0.0
-- langchain-community >= 0.2.0, < 0.3.0
-- google-generativeai >= 0.7.0, < 0.8.0
-- python-dotenv >= 1.0.0
-- google-search-results >= 2.4.2
-
-Optional (for resume file upload):
-```bash
-pip install PyPDF2 python-docx
-```
+- **Document Processing**: [PyPDF2](https://pypi.org/project/PyPDF2/) and [python-docx](https://pypi.org/project/python-docx/) - Resume file parsing
 
 ## 🇮🇳 Indian Market Focus
 
@@ -216,11 +151,7 @@ This platform is specifically designed for the Indian context:
 
 ## 🤝 Contributing
 
-Contributions are welcome! Here are some ways you can contribute:
-- Report bugs and issues
-- Suggest new features or career categories
-- Improve documentation
-- Submit pull requests
+Contributions are welcome! Please open an issue or submit a pull request for any improvements.
 
 ## 📝 License
 
@@ -233,46 +164,8 @@ This project is open source and available for educational and personal use.
 - Web search powered by [SerpAPI](https://serpapi.com/)
 - UI framework by [Streamlit](https://streamlit.io/)
 
-## 📧 Support
-
-For issues, questions, or suggestions:
-- Open an issue in the repository
-- Check existing documentation
-- Review the FAQ section below
-
-## ❓ FAQ
-
-### Q: What API keys do I need?
-A: You need two API keys:
-1. Google Gemini API Key (for AI capabilities)
-2. SerpAPI Key (for live web search)
-
-### Q: Is this application free to use?
-A: The application itself is free. However, the API services (Gemini and SerpAPI) have their own pricing models. Both offer free tiers that should be sufficient for personal use.
-
-### Q: Can I use this for careers outside India?
-A: While the platform is optimized for the Indian market, you can modify the prompts in the code to focus on other regions.
-
-### Q: What file formats are supported for resume upload?
-A: PDF, DOCX, DOC, and TXT files are supported. For PDF and DOCX support, install the optional dependencies.
-
-### Q: How do I deploy this application?
-A: You can deploy to Streamlit Community Cloud, Heroku, AWS, or any platform that supports Python web applications. Make sure to configure your API keys as secrets in your deployment environment.
-
-## 🗺️ Roadmap
-
-Future enhancements planned:
-- [ ] Support for more file formats in resume upload
-- [ ] Interview preparation module
-- [ ] Skill assessment tools
-- [ ] Personalized learning path tracking
-- [ ] Job application tracker
-- [ ] Networking and mentorship recommendations
-- [ ] Salary negotiation assistant
-- [ ] Multi-language support
-
 ---
 
 **Built with ❤️ for career seekers in India**
 
-*Last Updated: October 2024*
+*Last Updated: February 2025*
