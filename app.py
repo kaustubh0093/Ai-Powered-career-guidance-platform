@@ -122,42 +122,71 @@ def main():
     with col2:
         selected_subcareer = st.selectbox("🎯 Choose specific career:", CAREER_CATEGORIES[selected_category])
 
+    # Clear previous results if career selection changes
+    current_selection = f"{selected_category} → {selected_subcareer}"
+    if "last_selection" not in st.session_state:
+        st.session_state.last_selection = current_selection
+
+    if st.session_state.last_selection != current_selection:
+        st.session_state.career_insights = None
+        st.session_state.market_analysis = None
+        st.session_state.college_recommendations = None
+        st.session_state.last_selection = current_selection
+
     # Tab interface for different features
     tab1, tab2, tab3, tab4 = st.tabs(["🧭 Career Insights", "📊 Market Analysis", "🎓 College Advisor", "📝 Resume Coach"])
 
     with tab1:
         st.markdown("### 🧭 Career Insights & Learning Roadmap")
-        if st.button("🚀 Generate Career Insights", key="btn_career_insights", use_container_width=True):
-            st.session_state.selected_career = f"{selected_category} → {selected_subcareer}"
-            career_insights = generate_career_insights(selected_category, selected_subcareer, llm)
-            st.session_state.career_insights = career_insights
-            st.markdown(as_markdown(career_insights))
-        elif st.session_state.career_insights:
-            st.info(f"📋 Showing cached results for: **{st.session_state.selected_career}**")
+        
+        if st.session_state.career_insights:
+            st.info(f"📋 Showing insights for: **{st.session_state.selected_career}**")
             st.markdown(as_markdown(st.session_state.career_insights))
+            if st.button("� Regenerate Insights", key="btn_regen_career"):
+                st.session_state.career_insights = None
+                st.rerun()
+        else:
+            if st.button("�🚀 Generate Career Insights", key="btn_career_insights", use_container_width=True):
+                with st.spinner("🧠 Analyzing career path and generating roadmap..."):
+                    st.session_state.selected_career = current_selection
+                    career_insights = generate_career_insights(selected_category, selected_subcareer, llm)
+                    st.session_state.career_insights = career_insights
+                    st.rerun()
 
     with tab2:
         st.markdown("### 📊 Live Market Analysis")
-        if st.button("📈 Fetch Market Data", key="btn_market_analysis", use_container_width=True):
-            st.session_state.selected_career = f"{selected_category} → {selected_subcareer}"
-            market_analysis = generate_market_analysis(selected_subcareer, llm)
-            st.session_state.market_analysis = market_analysis
-            st.markdown(as_markdown(market_analysis))
-        elif st.session_state.market_analysis:
-            st.info(f"📋 Showing cached results for: **{st.session_state.selected_career}**")
+        
+        if st.session_state.market_analysis:
+            st.info(f"📋 Showing market data for: **{st.session_state.selected_career}**")
             st.markdown(as_markdown(st.session_state.market_analysis))
+            if st.button("🔄 Refresh Market Data", key="btn_regen_market"):
+                st.session_state.market_analysis = None
+                st.rerun()
+        else:
+            if st.button("📈 Fetch Market Data", key="btn_market_analysis", use_container_width=True):
+                with st.spinner("📊 Fetching live market trends and salary data..."):
+                    st.session_state.selected_career = current_selection
+                    market_analysis = generate_market_analysis(selected_subcareer, llm)
+                    st.session_state.market_analysis = market_analysis
+                    st.rerun()
 
     with tab3:
         st.markdown("### 🎓 College & University Recommendations")
         st.markdown("*Get personalized recommendations for Indian colleges and universities*")
-        if st.button("🏛️ Get College Recommendations", key="btn_college_recs", use_container_width=True):
-            st.session_state.selected_career = f"{selected_category} → {selected_subcareer}"
-            college_recommendations = generate_college_recommendations(selected_subcareer, llm)
-            st.session_state.college_recommendations = college_recommendations
-            st.markdown(as_markdown(college_recommendations))
-        elif st.session_state.college_recommendations:
-            st.info(f"📋 Showing cached results for: **{st.session_state.selected_career}**")
+        
+        if st.session_state.college_recommendations:
+            st.info(f"📋 Showing recommendations for: **{st.session_state.selected_career}**")
             st.markdown(as_markdown(st.session_state.college_recommendations))
+            if st.button("🔄 Update Recommendations", key="btn_regen_college"):
+                st.session_state.college_recommendations = None
+                st.rerun()
+        else:
+            if st.button("🏛️ Get College Recommendations", key="btn_college_recs", use_container_width=True):
+                with st.spinner("🏛️ Searching for top Indian universities and programs..."):
+                    st.session_state.selected_career = current_selection
+                    college_recommendations = generate_college_recommendations(selected_subcareer, llm)
+                    st.session_state.college_recommendations = college_recommendations
+                    st.rerun()
 
     with tab4:
         st.markdown("### 📝 Resume Coach & Feedback")
@@ -239,17 +268,22 @@ def main():
             key="target_role_input"
         )
         
-        if st.button("🔍 Analyze Resume", key="btn_resume_analysis", use_container_width=True):
-            if not resume_text or len(resume_text.strip()) < 100:
-                st.warning("⚠️ Please provide your resume content (at least 100 characters)")
-            else:
-                target_role = target_role_input if target_role_input else selected_subcareer
-                resume_feedback = generate_resume_feedback(resume_text, target_role, llm)
-                st.session_state.resume_feedback = resume_feedback
-                st.markdown(as_markdown(resume_feedback))
-        elif st.session_state.resume_feedback:
+        if st.session_state.resume_feedback:
             st.info("📋 Showing previous resume analysis")
             st.markdown(as_markdown(st.session_state.resume_feedback))
+            if st.button("� Re-analyze Resume", key="btn_regen_resume"):
+                st.session_state.resume_feedback = None
+                st.rerun()
+        else:
+            if st.button("�🔍 Analyze Resume", key="btn_resume_analysis", use_container_width=True):
+                if not resume_text or len(resume_text.strip()) < 100:
+                    st.warning("⚠️ Please provide your resume content (at least 100 characters)")
+                else:
+                    with st.spinner("📝 Expert resume coach is analyzing your profile..."):
+                        target_role = target_role_input if target_role_input else selected_subcareer
+                        resume_feedback = generate_resume_feedback(resume_text, target_role, llm)
+                        st.session_state.resume_feedback = resume_feedback
+                        st.rerun()
 
     st.markdown("---")
     create_chat_interface(agent_executor)
