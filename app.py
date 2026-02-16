@@ -142,11 +142,11 @@ def main():
         if st.session_state.career_insights:
             st.info(f"📋 Showing insights for: **{st.session_state.selected_career}**")
             st.markdown(as_markdown(st.session_state.career_insights))
-            if st.button("� Regenerate Insights", key="btn_regen_career"):
+            if st.button(" Regenerate Insights", key="btn_regen_career"):
                 st.session_state.career_insights = None
                 st.rerun()
         else:
-            if st.button("�🚀 Generate Career Insights", key="btn_career_insights", use_container_width=True):
+            if st.button("🚀 Generate Career Insights", key="btn_career_insights", use_container_width=True):
                 with st.spinner("🧠 Analyzing career path and generating roadmap..."):
                     st.session_state.selected_career = current_selection
                     career_insights = generate_career_insights(selected_category, selected_subcareer, llm)

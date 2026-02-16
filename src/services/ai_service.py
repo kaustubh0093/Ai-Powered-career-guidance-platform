@@ -14,7 +14,7 @@ def initialize_llm_and_tools(google_api_key: str, serpapi_key: str) -> Tuple[Opt
             raise ValueError("SerpAPI key is required.")
 
         llm = ChatGoogleGenerativeAI(
-            model="gemini-1.5-flash",
+            model="gemini-2.5-flash",
             google_api_key=google_api_key,
             temperature=0.7,
             convert_system_message_to_human=True,
@@ -73,7 +73,7 @@ Provide structured markdown that includes:
 Keep the output practical, actionable, and formatted in markdown. Focus on the Indian job market context.
 """
 
-        with st.spinner("🧭 Generating career insights..."):
+        with st.spinner("🧭Generating career insights..."):
             output = llm.invoke(career_prompt)
 
         return output
